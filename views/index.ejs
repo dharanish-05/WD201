@@ -1,35 +1,28 @@
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home Todo</title>
-    <link rel="stylesheet" href="./css/style.css" />
-  </head>
-  <body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Todo App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="./css/style.css" rel="stylesheet">
+</head>
+<body>
     <%- include('header.ejs') %> 
-
     <table>
-
-    <!-- Over due -->
-    <p><b style="font-size: 25px;">Overdue</b> <%= overdueComplete.length %> / <%= overdue.length %></p>
-    <% for (var i=0; i<overdue.length; i++) { %>
-    <td style="display: flex; flex-wrap: wrap;"><input type="checkbox" checked> <p style="font-size: 15px;"><%= overdue[i].title%> <%= overdue[i].dueDate.toLocaleString("en-us", { month: "short" }) %></p></td>
-    <% } %>
-
-    <!-- Due Today -->
-    <p><b style="font-size: 25px;">Due Today</b> <%=todayComplete.length%> / <%=today.length%></p>
-    <% for (var i=0; i<today.length; i++) { %>
-      <td style="display: flex; flex-wrap: wrap;"><input type="checkbox" value=<%today[i].completed%>> <p style="font-size: 15px;"><%= today[i].title%></p></td>>
-    <% } %>
-
-    <!-- Due Later -->
-    <b style="font-size: 25px;">Due Later</b> <%=laterComplete.length%> / <%=later.length%></p>
-    <% for (var i=0; i<later.length; i++) { %>
-      <td style="display: flex; flex-wrap: wrap;"><input type="checkbox" value=<%later[i].completed%>> <p style="font-size: 15px;"><%= later[i].title%> <%= later[i].dueDate%></p></td>
-    <% } %>
-
-  </table>
-
-    <%- include('footer.ejs') %> 
-  </body>
+        <tr>
+            <td>
+                BUY ROLLSROYCE
+            </td>
+        </tr>
+        <tr>
+            <td>
+                EAT BURGER
+            </td>
+        </tr>
+    </table>
+    
+</body>
+<%- include('footer.ejs') %>
 </html>
