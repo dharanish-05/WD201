@@ -9,20 +9,11 @@
     <link href="./css/style.css" rel="stylesheet">
 </head>
 <body>
-    <%- include('header.ejs') %> 
-    <table>
-        <tr>
-            <td>
-                BUY ROLLSROYCE
-            </td>
-        </tr>
-        <tr>
-            <td>
-                EAT BURGER
-            </td>
-        </tr>
-    </table>
-    
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <%- include('header.ejs') %> 
+        </div>
+    </div> 
+    <%- include('todo.ejs') %>
 </body>
-<%- include('footer.ejs') %>
 </html>
