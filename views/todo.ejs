@@ -7,14 +7,14 @@
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
-            <form>
+            <form action="/todos" method="post">
                 <div class="flex gap-2 py-4">
                     <div class="flex-auto">
-                        <input type="text" placeholder="what's next?" class=" border border-green-700 
+                        <input type="text" name="title" placeholder="what's next?" class=" border border-green-700 
                         rounded text-gray-900 w-full p-2 text-sm"required/>
                     </div>
                     <div class="flex-auto">
-                        <input type="date" class=" border border-green-700 
+                        <input type="date" name="dueDate" class=" border border-green-700 
                         rounded text-gray-900 w-full p-2 text-sm leading-4" />
                     </div>
                     <div class="flex-none">
