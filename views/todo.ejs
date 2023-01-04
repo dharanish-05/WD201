@@ -24,8 +24,8 @@
             </form>
             <div>
                 <h5 style="display: inline;">Overdue</h5>
-                <label id="count-Overdue"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
-                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= Overdue.length %></label>
+                <span id="count-Overdue"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
+                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= Overdue.length %></span>
                 <ul class="list-none">
                     <% for(let i = 0; i < Overdue.length; i++) { %>
                         <li class="Todo-Item">
@@ -46,8 +46,8 @@
                     <% } %>    
                 </ul>
                 <h5 style="display: inline;">Due Today</h5>
-                <label id="count-DueToday"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
-                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= DueToday.length %></label>
+                <span id="count-DueToday"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
+                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= DueToday.length %></span>
                 <ul class="list-none">
                     <% for(let i = 0; i < DueToday.length; i++) { %>
                         <li class="Todo-Item">
@@ -68,8 +68,8 @@
                     <% } %>    
                 </ul>
                 <h5 style="display: inline;">Due Later</h5>
-                <label id="count-DueLater"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
-                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= DueLater.length %></label>
+                <span id="count-DueLater"  class="items-center justify-self-start w-6 h-6 my-1 px-2  bg-gray-100 text-black 
+                md:font-bold rounded fond-bold mr-2 mb-2 border-gray"><%= DueLater.length %></span>
                 <ul class="list-none">
                     <% for(let i = 0; i < DueLater.length; i++) { %>
                         <li class="Todo-Item">
