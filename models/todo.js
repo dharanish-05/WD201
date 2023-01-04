@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({
         where: {
           dueDate: {
-            [Op.gt]: new Date().toISOString(),
+            [Op.eq]: new Date().toISOString(),
           },
         },
         order: [["id", "ASC"]],
@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.findAll({
         where: {
           dueDate: {
-            [Op.eq]: new Date().toISOString(),
+            [Op.gt]: new Date().toISOString(),
           },
         },
         order: [["id", "ASC"]],
