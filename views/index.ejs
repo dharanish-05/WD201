@@ -7,41 +7,6 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <title><%= title %></title>
-    <script>
-        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        function updateTodo(id) {
-          const bool =document.querySelector(`#todo-checkbox-${id}`).checked
-          fetch(`/todos/${id}`, {
-            method: 'put',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-          "_csrf": token,
-          completed:bool
-        })
-          }).then((res) => {
-            if(res.ok)
-            {
-              window.location.reload();
-            }
-          
-          }).catch(err => console.error(err))
-        }
-        function deleteTodo(id) {
-          console.log(id);
-          fetch(`/todos/${id}`, {
-            method: 'delete',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-          "_csrf": token
-        })
-          }).then((res) => {
-            if(res.ok)
-            {
-              window.location.reload();
-            }
-          }).catch(err => console.error(err))
-        }
-      </script>
 </head>
 <body>
     
@@ -51,27 +16,6 @@
             <p class="py-2">Welcome to the To-do Manager</p>
             <p class="py-2">New Here? <a href="/signup" class="text-blue-600">signup now</a></p>
             <p class="py-2">Already Have an Account? <a href="/login" class="text-blue-600">login here</a></P>
-            <form action="/todos" method="post" onsubmit="validate()">
-              <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
-                <div class="flex gap-2 p-4">
-                    <div class="flex-auto">
-                        <input type="text" title="Enter atleast 2 characters.Remove space in the beginning" pattern="([^\s][A-z0-9À-ž\s]+)" name="title" placeholder="whats next?" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required/>
-
-                    </div>
-                    <div class="flex-auto">
-                        <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
-                    </div>
-                    <div class="flex-none">
-                        <button type="submit" class="bg-green-600 text-white px-5 py-2 rounded font-medium py-1.5">Add</button>
-                    </div>
-                </div>
-            </form>
-            <div>
-                <%- include('todo.ejs', {title: "Overdue" , data: overdue}) %>
-                <%- include('todo.ejs', {title: "Due Today" , data: dueToday}) %>
-                <%- include('todo.ejs', {title: "Due Later" , data: dueLater}) %>
-                <%- include('todo.ejs', {title: "Completed items" , data: completed}) %>
-            </div>
         </div>
     </div>
 
