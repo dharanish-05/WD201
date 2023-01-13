@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 var csrf = require("tiny-csrf");
-const { Todo } = require("./models");
+const { Todo,User} = require("./models");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -12,6 +12,7 @@ app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
 app.set("view engine", "ejs");
 const path = require("path");
+const { title } = require("process");
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -40,6 +41,23 @@ app.get("/", async function (request, response) {
   }
 });
 
+app.get("/signup", (request , response) => {
+   response.render("signup",{title:"signup", csrfToken:request.csrfToken()} )
+})
+
+app.post("/users",async (request,response) => {
+  try{
+    const user= await User.create({
+      firstname: request.body.firstname,
+      lastname: request.body.lastname,
+      email: request.body.email,
+      password: request.body.password,
+    })
+    response.redirect("/");
+  } catch(error){
+    console.log("error");
+  }
+})
 app.get("/todos/:id", async function (request, response) {
   try {
     const todo = await Todo.findByPk(request.params.id);
