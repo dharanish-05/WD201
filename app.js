@@ -75,11 +75,12 @@ app.get("/", async function (request, response) {
 });
 
 app.get("/todos",connectensurelogin.ensureLoggedIn(), async function (request, response) {
+  const loggedInUser= request.user.id;
   const alltodo = await Todo.getTodos();
-  const overdue = await Todo.overdue();
-  const dueToday = await Todo.dueToday();
-  const dueLater = await Todo.dueLater();
-  const completed = await Todo.completed();
+  const overdue = await Todo.overdue(loggedInUser);
+  const dueToday = await Todo.dueToday(loggedInUser);
+  const dueLater = await Todo.dueLater(loggedInUser);
+  const completed = await Todo.completed(loggedInUser);
   if (request.accepts("html")) {
     response.render("todos", {
       title: "Todo application",
@@ -159,8 +160,9 @@ app.post("/todos",connectensurelogin.ensureLoggedIn(), async (request, response)
     await Todo.addTodo({
       title: request.body.title,
       dueDate: request.body.dueDate,
+      userId: request.user.id
     });
-    return response.redirect("/");
+    return response.redirect("/todos");
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
@@ -180,7 +182,7 @@ app.put("/todos/:id",connectensurelogin.ensureLoggedIn(), async (request, respon
 
 app.delete("/todos/:id", connectensurelogin.ensureLoggedIn(),async (request, response) => {
   try {
-    await Todo.remove(request.params.id);
+    await Todo.remove(request.params.id,request.user.id);
     return response.json(true);
   } catch (error) {
     console.log(error);
