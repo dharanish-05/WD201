@@ -20,6 +20,7 @@ app.set("view engine", "ejs");
 const path = require("path");
 const { title } = require("process");
 
+
 app.use(express.static(path.join(__dirname, "public")));
 app.use(session({
   secret:"my-super-secret-key-123345657898",
@@ -135,6 +136,14 @@ app.get("/login", async(request, response) => {
 app.post("/session", passport.authenticate('local',{failureRedirect:"/login"}), (request,response)=>{
   response.redirect("/todos");
 })
+
+app.get("/signout",(request,response) => {
+  //signing out
+  request.logout((err) => {
+    if (err) { return next(err); }
+    response.redirect("/");
+  })
+})
 app.get("/todos/:id", async function (request, response) {
   try {
     const todo = await Todo.findByPk(request.params.id);
@@ -145,7 +154,7 @@ app.get("/todos/:id", async function (request, response) {
   }
 });
 
-app.post("/todos", async (request, response) => {
+app.post("/todos",connectensurelogin.ensureLoggedIn(), async (request, response) => {
   try {
     await Todo.addTodo({
       title: request.body.title,
@@ -158,7 +167,7 @@ app.post("/todos", async (request, response) => {
   }
 });
 
-app.put("/todos/:id", async (request, response) => {
+app.put("/todos/:id",connectensurelogin.ensureLoggedIn(), async (request, response) => {
   const todo = await Todo.findByPk(request.params.id);
   try {
     const updatedTodo = await todo.setCompletionStatus(request.body.completed);
@@ -169,7 +178,7 @@ app.put("/todos/:id", async (request, response) => {
   }
 });
 
-app.delete("/todos/:id", async (request, response) => {
+app.delete("/todos/:id", connectensurelogin.ensureLoggedIn(),async (request, response) => {
   try {
     await Todo.remove(request.params.id);
     return response.json(true);
