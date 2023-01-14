@@ -17,13 +17,33 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   User.init({
-    firstname: DataTypes.STRING,
+    firstname: {
+      type:DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull:true, 
+        },
+  },
     lastname: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
-  }, {
+    email: {
+      type:DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull:true, 
+        },
+  },
+  password: {
+      type:DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull:true, 
+        },
+  }
+},
+  {
     sequelize,
     modelName: 'User',
-  });
+  }
+  );
   return User;
 };

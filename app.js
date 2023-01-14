@@ -117,12 +117,12 @@ app.get("/signup", (request , response) => {
 
 app.post("/users",async (request,response) => {
   try{
-    if(request.body.firstName.length<1 )
+    if(request.body.firstname.length<1 )
     {
       request.flash("error", "please enter First Name");
        return response.redirect('/signup');
     }
-    if(request.body.lastName.length<1 )
+    if(request.body.lastname.length<1 )
     {
       request.flash("error", "please enter Last Name");
        return response.redirect('/signup');
@@ -137,30 +137,30 @@ app.post("/users",async (request,response) => {
       request.flash("error", "please enter password consist of minimum 8 characters");
        return response.redirect('/signup');
     
-  }
-  //hash using bcrypt
-  const hashedPwd = await bcrypt.hash(request.body.password,saltRounds)
-  console.log(hashedPwd)
-
-  //users creation here
-  const user= await User.create({
-    firstname: request.body.firstname,
-    lastname: request.body.lastname,
-    email: request.body.email,
-    password: hashedPwd,
-  });
-  request.login(user , (err) =>{
-    if(err) {
-      console.log(err)
     }
-    response.redirect("/todos");
-  })
-    
+    //hash using bcrypt
+    const hashedPwd = await bcrypt.hash(request.body.password,saltRounds)
+    console.log(hashedPwd)
+
+    //users creation here
+    const user= await User.create({
+      firstname: request.body.firstname,
+      lastname: request.body.lastname,
+      email: request.body.email,
+      password: hashedPwd,
+    });
+    request.login(user , (err) =>{
+      if(err) {
+        console.log(err)
+      }
+      response.redirect("/todos");
+    })
+      
   } 
   catch (error) {
-    console.log(error);
-    request.flash("error", "Already registered Email Id!!!!");
-     return response.redirect('/signup');
+      console.log(error);
+      request.flash("error", "Already registered Email Id!!!!");
+      return response.redirect('/signup');
   }
 
 })
