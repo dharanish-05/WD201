@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const connectensurelogin=require("connect-ensure-login");
 const session=require("express-session");
+const flash = require("connect-flash");
 const LocalStrategy=require("passport-local");
 const bcrypt=require('bcrypt');
 const saltRounds=10;
@@ -18,6 +19,8 @@ app.use(csrf("this_should_be_32_character_long", ["POST", "PUT", "DELETE"]));
 
 app.set("view engine", "ejs");
 const path = require("path");
+app.set("views", path.join(__dirname, "views"));
+app.use(flash())
 const { title } = require("process");
 
 
@@ -43,11 +46,11 @@ passport.use(new LocalStrategy({
     if(result) {
       return done(null,user);
     } else {
-      return done("Invalid Password");
+      return done(null,false,{message:"Invalid Password"});
     }
     
   }).catch((error) => {
-    return (error)
+    return done(null,false,{message:"please check email id"})
   })
 }))
 
@@ -67,6 +70,14 @@ passport.deserializeUser((id , done) => {
     })
 
 });
+
+
+app.use(function (request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
+
+
 app.get("/", async function (request, response) {
     response.render("index", {
       title: "Todo application",
@@ -105,36 +116,60 @@ app.get("/signup", (request , response) => {
 })
 
 app.post("/users",async (request,response) => {
-
+  try{
+    if(request.body.firstName.length<1 )
+    {
+      request.flash("error", "please enter First Name");
+       return response.redirect('/signup');
+    }
+    if(request.body.lastName.length<1 )
+    {
+      request.flash("error", "please enter Last Name");
+       return response.redirect('/signup');
+    }
+    if(request.body.email.length<1)
+    {
+      request.flash('error', 'please enter Email Id');
+      return response.redirect('/signup');
+    }
+    if(request.body.password.length<8)
+    {
+      request.flash("error", "please enter password consist of minimum 8 characters");
+       return response.redirect('/signup');
+    
+  }
   //hash using bcrypt
   const hashedPwd = await bcrypt.hash(request.body.password,saltRounds)
   console.log(hashedPwd)
 
   //users creation here
-  try{
-    const user= await User.create({
-      firstname: request.body.firstname,
-      lastname: request.body.lastname,
-      email: request.body.email,
-      password: hashedPwd,
-    });
-    request.login(user , (err) =>{
-      if(err) {
-        console.log(err)
-      }
-      response.redirect("/todos");
-    })
+  const user= await User.create({
+    firstname: request.body.firstname,
+    lastname: request.body.lastname,
+    email: request.body.email,
+    password: hashedPwd,
+  });
+  request.login(user , (err) =>{
+    if(err) {
+      console.log(err)
+    }
+    response.redirect("/todos");
+  })
     
-  } catch(error){
-    console.log("error");
+  } 
+  catch (error) {
+    console.log(error);
+    request.flash("error", "Already registered Email Id!!!!");
+     return response.redirect('/signup');
   }
+
 })
 
 app.get("/login", async(request, response) => {
   response.render("login", {title:"login", csrfToken:request.csrfToken()});
 })
 
-app.post("/session", passport.authenticate('local',{failureRedirect:"/login"}), (request,response)=>{
+app.post("/session", passport.authenticate('local',{failureRedirect:"/login",failureFlash: true,}), (request,response)=>{
   response.redirect("/todos");
 })
 
@@ -156,6 +191,15 @@ app.get("/todos/:id", async function (request, response) {
 });
 
 app.post("/todos",connectensurelogin.ensureLoggedIn(), async (request, response) => {
+  if(request.body.title== null || request.body.title.length<5)
+    {
+      request.flash('error', 'please enter a todo title with minimum 5 characters');
+      return response.redirect('/todos');
+    }
+  if(!request.body.dueDate){
+      request.flash('error', 'please select date');
+      return response.redirect('/todos');
+  }
   try {
     await Todo.addTodo({
       title: request.body.title,
@@ -165,6 +209,7 @@ app.post("/todos",connectensurelogin.ensureLoggedIn(), async (request, response)
     return response.redirect("/todos");
   } catch (error) {
     console.log(error);
+    request.flash("error", error.message);
     return response.status(422).json(error);
   }
 });
