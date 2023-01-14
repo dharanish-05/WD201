@@ -1,0 +1,30 @@
+<html>
+    <head><meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="<%= csrfToken %>"/>
+        <link rel="stylesheet" href="./css/styles.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title><%= title %></title>
+    </head>
+    <body>
+        <div class="grid grid-cols-6">
+            <div class="col-start-3 col-span-2">
+                <%- include('header.ejs')  %> 
+                <h6 class="py-4" align="center">Login into your account</h4>
+                <form action="/session" method="post">
+                    <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
+                    <div class="py-3">
+                        <label for="email">Email</label>
+                        <input type="text" name="email" class="border border-green-600 rounded text-gray-900 p-2 w-full">
+                    </div>
+                    <div class="py-3">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="border border-green-600 rounded text-gray-900 p-2 w-full">
+                    </div>
+                    <button type="submit" class="bg-green-600 rounded text-white hover:bg-purple-500 px-5 py-2">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
